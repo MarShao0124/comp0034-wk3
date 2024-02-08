@@ -3,6 +3,7 @@ from typing import List
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from paralympics import db
+import json
 
 
 # This uses the latest syntax for SQLAlchemy, older tutorials will show different syntax
@@ -46,3 +47,6 @@ class User(db.Model):
     id: Mapped[int] = mapped_column(db.Integer, primary_key=True)
     email: Mapped[str] = mapped_column(db.String, unique=True, nullable=False)
     password: Mapped[str] = mapped_column(db.String, unique=True, nullable=False)
+
+    def to_json(self):
+        return json.dumps(self.__dict__)

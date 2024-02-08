@@ -3,7 +3,7 @@ import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase
-
+from flask_marshmallow import Marshmallow
 
 # https://flask-sqlalchemy.palletsprojects.com/en/3.1.x/quickstart/
 class Base(DeclarativeBase):
@@ -13,7 +13,7 @@ class Base(DeclarativeBase):
 # First create the db object using the SQLAlchemy constructor.
 # Pass a subclass of either DeclarativeBase or DeclarativeBaseNoMeta to the constructor.
 db = SQLAlchemy(model_class=Base)
-
+ma = Marshmallow()
 
 def create_app(test_config=None):
     # create and configure the app
@@ -21,7 +21,7 @@ def create_app(test_config=None):
 
     app.config.from_mapping(
         # Generate your own SECRET_KEY using python secrets
-        SECRET_KEY='l-tirPCf1S44mWAGoWqWlA',
+        SECRET_KEY='dev',
         # configure the SQLite database, relative to the app instance folder
         SQLALCHEMY_DATABASE_URI="sqlite:///" + os.path.join(app.instance_path, 'paralympics.sqlite'),
         SQLALCHEMY_ECHO=True
@@ -42,7 +42,7 @@ def create_app(test_config=None):
 
     # Initialise Flask with the SQLAlchemy database extension
     db.init_app(app)
-
+    ma.init_app(app)
     # Models are defined in the models module, so you must import them before calling create_all, otherwise SQLAlchemy
     # will not know about them.
     from paralympics.models import User, Region, Event
@@ -58,6 +58,7 @@ def create_app(test_config=None):
 
         # Register the routes with the app in the context
         from paralympics import paralympics
+
 
     return app
 
